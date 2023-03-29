@@ -346,6 +346,16 @@ typedef enum OrtMemType {
   OrtMemTypeDefault = 0,                ///< The default allocator for execution provider
 } OrtMemType;
 
+/** \brief Input stream interface
+*
+* Holds pointer to a callback function to read from a stream. Can be used to load models from streams,
+* \see OrtApi::CreateSessionFromStream.
+*/
+typedef struct OrtInputStream {
+  size_t(ORT_API_CALL* Read)(char* buffer, size_t count, void* user_object);  ///< Stream read callback
+  void* user_object;
+} OrtInputStream;
+
 /** \brief Algorithm to use for cuDNN Convolution Op
 */
 typedef enum OrtCudnnConvAlgoSearch {
@@ -3486,6 +3496,18 @@ struct OrtApi {
   * \since Version 1.12.
   */
   ORT_CLASS_RELEASE(KernelInfo);
+
+  /** \brief Create an OrtSession from an OrtInputStream
+  *
+  * \param[in] env
+  * \param[in] model_stream
+  * \param[in] options
+  * \param[out] out Returned newly created OrtSession. Must be freed with OrtApi::ReleaseSession
+  *
+  * \snippet{doc} snippets.dox OrtStatus Return Value
+  */
+  ORT_API2_STATUS(CreateSessionFromStream, _In_ const OrtEnv* env, _In_ OrtInputStream* model_stream,
+                  _In_ const OrtSessionOptions* options, _Outptr_ OrtSession** out);
 };
 
 /*

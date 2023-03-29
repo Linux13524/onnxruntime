@@ -388,4 +388,6 @@ ORT_API_STATUS_IMPL(CopyKernelInfo, _In_ const OrtKernelInfo* info, _Outptr_ Ort
 
 ORT_API(void, ReleaseKernelInfo, _Frees_ptr_opt_ OrtKernelInfo* info_copy);
 
+ORT_API_STATUS_IMPL(CreateSessionFromStream, _In_ const OrtEnv* env, _In_ OrtInputStream* model_stream,
+                    _In_ const OrtSessionOptions* options, _Outptr_ OrtSession** out);
 }  // namespace OrtApis
